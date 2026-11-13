@@ -2177,6 +2177,10 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
     background-color: #0084ff;
   }
 
+  .floating-btn.btn-facebook {
+    background-color: #1877f2;
+  }
+
   .floating-btn.btn-book {
     background-color: var(--gold-primary);
     color: #17110c;
