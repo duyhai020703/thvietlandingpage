@@ -6,7 +6,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initHeaderSlider();
-  initCountdown();
   initMenuBook();
   initBookingForm();
   initAmbianceModal();
@@ -287,16 +286,16 @@ function initMenuBook() {
 
 function updatePageStatus(currentPageIdx) {
   const currentBadge = document.getElementById('currentPageBadge');
-  const prevBtn = document.getElementById('prevPageBtn');
-  const nextBtn = document.getElementById('nextPageBtn');
+  const arrowPrev = document.getElementById('arrowPrev');
+  const arrowNext = document.getElementById('arrowNext');
   const total = MENU_PAGES.length;
 
   if (currentBadge) {
     currentBadge.innerHTML = `Trang <strong>${currentPageIdx + 1}</strong> <span class="total-pages">/ ${total}</span>`;
   }
 
-  if (prevBtn) prevBtn.disabled = (currentPageIdx <= 0);
-  if (nextBtn) nextBtn.disabled = (currentPageIdx >= total - 1);
+  if (arrowPrev) arrowPrev.disabled = (currentPageIdx <= 0);
+  if (arrowNext) arrowNext.disabled = (currentPageIdx >= total - 1);
 
   // Update thumbnails active state (Chỉ cuộn nội bộ dải thumbnail, không làm giật cuộn cả trang web)
   const thumbs = document.querySelectorAll('.thumb-item');
@@ -327,50 +326,7 @@ function updatePageStatus(currentPageIdx) {
 }
 
 function setupBookControls() {
-  const prevBtn = document.getElementById('prevPageBtn');
-  const nextBtn = document.getElementById('nextPageBtn');
-  const soundBtn = document.getElementById('toggleSoundBtn');
-  const fullBtn = document.getElementById('toggleFullscreenBtn');
-  const zoomBtn = document.getElementById('zoomCurrentPageBtn');
-  const viewModeBtn = document.getElementById('toggleViewModeBtn');
-  let isSinglePageMode = false;
-
-  // Chuyển đổi giữa chế độ 1 trang to rõ nét và 2 trang
-  if (viewModeBtn) {
-    viewModeBtn.addEventListener('click', () => {
-      isSinglePageMode = !isSinglePageMode;
-      const viewport = document.querySelector('.interactive-book-viewport');
-      const viewModeText = document.getElementById('viewModeText');
-
-      if (isSinglePageMode) {
-        if (viewport) viewport.style.maxWidth = '640px';
-        if (viewModeText) viewModeText.textContent = 'Xem 2 trang';
-        viewModeBtn.classList.add('active');
-      } else {
-        if (viewport) viewport.style.maxWidth = '100%';
-        if (viewModeText) viewModeText.textContent = 'Xem 1 trang to';
-        viewModeBtn.classList.remove('active');
-      }
-
-      if (pageFlipInstance) {
-        pageFlipInstance.update();
-      }
-    });
-  }
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (pageFlipInstance) pageFlipInstance.flipPrev();
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (pageFlipInstance) pageFlipInstance.flipNext();
-    });
-  }
-
-  // Next/prev arrows on left/right edges
+  // 2 Nút mũi tên chuyển trang 2 bên
   const arrowPrev = document.getElementById('arrowPrev');
   const arrowNext = document.getElementById('arrowNext');
   if (arrowPrev) {
@@ -384,47 +340,12 @@ function setupBookControls() {
     });
   }
 
-  // Sound Toggle
-  if (soundBtn) {
-    soundBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      soundBtn.classList.toggle('active', soundEnabled);
-      soundBtn.innerHTML = soundEnabled
-        ? '<i class="fa-solid fa-volume-high"></i> Âm thanh: BẬT'
-        : '<i class="fa-solid fa-volume-xmark"></i> Âm thanh: TẮT';
-      if (soundEnabled) playPageFlipSound();
-    });
-  }
-
-  // Fullscreen
-  if (fullBtn) {
-    fullBtn.addEventListener('click', () => {
-      const stage = document.querySelector('.book-stage-wrapper');
-      if (!document.fullscreenElement) {
-        if (stage.requestFullscreen) stage.requestFullscreen();
-        fullBtn.innerHTML = '<i class="fa-solid fa-compress"></i> Thu nhỏ';
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-        fullBtn.innerHTML = '<i class="fa-solid fa-expand"></i> Toàn màn hình';
-      }
-    });
-  }
-
-  // Zoom Current Page in Lightbox
-  if (zoomBtn) {
-    zoomBtn.addEventListener('click', () => {
-      if (!pageFlipInstance) return;
-      const cur = pageFlipInstance.getCurrentPageIndex();
-      openMenuLightbox(cur);
-    });
-  }
-
   // Category Pills Jump
   const catPills = document.querySelectorAll('.cat-pill-btn');
   catPills.forEach(pill => {
     pill.addEventListener('click', () => {
-      const targetCat = pill.dataset.cat;
-      const targetIdx = MENU_PAGES.findIndex(p => p.cat === targetCat);
+      const cat = pill.dataset.cat;
+      const targetIdx = MENU_PAGES.findIndex(p => p.cat === cat);
       if (targetIdx !== -1 && pageFlipInstance) {
         pageFlipInstance.flip(targetIdx);
       }
@@ -608,47 +529,6 @@ function initAmbianceModal() {
       document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
     }
   });
-}
-
-/* ==========================================================================
-   7. COUNTDOWN TIMER (Tuần lễ khai trương)
-   ========================================================================== */
-function initCountdown() {
-  // Thời gian kết thúc ưu đãi khai trương: hết ngày 13/11/2026 lúc 23:59:59
-  const openingEndDate = new Date('2026-11-13T23:59:59+07:00').getTime();
-
-  function update() {
-    const now = new Date().getTime();
-    const distance = openingEndDate - now;
-
-    const daysEl = document.getElementById('cdDays');
-    const hoursEl = document.getElementById('cdHours');
-    const minsEl = document.getElementById('cdMins');
-    const secsEl = document.getElementById('cdSecs');
-
-    if (!daysEl) return;
-
-    if (distance <= 0) {
-      daysEl.textContent = '00';
-      hoursEl.textContent = '00';
-      minsEl.textContent = '00';
-      secsEl.textContent = '00';
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    daysEl.textContent = String(days).padStart(2, '0');
-    hoursEl.textContent = String(hours).padStart(2, '0');
-    minsEl.textContent = String(minutes).padStart(2, '0');
-    secsEl.textContent = String(seconds).padStart(2, '0');
-  }
-
-  update();
-  setInterval(update, 1000);
 }
 
 /* ==========================================================================

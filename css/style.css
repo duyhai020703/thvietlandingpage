@@ -1036,51 +1036,12 @@ textarea {
   touch-action: pan-y;
 }
 
-/* Book Controls Bar */
-.book-toolbar {
+/* Book Header Status (Chỉ số trang tối giản, sang trọng thay cho cụm nút cũ) */
+.book-header-status {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-bottom: 22px;
-  margin-bottom: 26px;
-  border-bottom: 1px solid var(--border-subtle);
-  flex-wrap: wrap;
-}
-
-.toolbar-left,
-.toolbar-right,
-.toolbar-center {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.book-btn-tool {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.88rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.book-btn-tool:hover {
-  background-color: var(--bg-surface-elevated);
-  border-color: var(--gold-border);
-  color: var(--gold-light);
-}
-
-.book-btn-tool.active {
-  background-color: var(--gold-soft);
-  border-color: var(--gold-primary);
-  color: var(--gold-primary);
+  justify-content: center;
+  margin-bottom: 22px;
 }
 
 .page-counter-badge {
@@ -1090,11 +1051,12 @@ textarea {
   color: var(--gold-light);
   background-color: var(--bg-surface-elevated);
   border: 1px solid var(--border-panel);
-  padding: 6px 18px;
+  padding: 8px 24px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 .page-counter-badge .total-pages {
@@ -1114,43 +1076,46 @@ textarea {
   touch-action: pan-y;
 }
 
-/* Prev / Next Page floating trigger buttons */
+/* 2 Nút mũi tên chuyển trang nổi bật ở 2 bên cho người dùng dễ thao tác */
 .book-nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background-color: rgba(34, 28, 24, 0.95);
-  border: 1px solid var(--border-panel);
+  background-color: rgba(26, 20, 16, 0.94);
+  border: 2px solid var(--gold-primary);
   color: var(--gold-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   cursor: pointer;
-  z-index: 30;
+  z-index: 40;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .book-nav-arrow:hover {
   background-color: var(--gold-primary);
   color: #17110c;
-  transform: translateY(-50%) scale(1.1);
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: 0 8px 30px rgba(212, 163, 72, 0.45);
 }
 
 .book-nav-arrow.prev-btn {
-  left: 4px;
+  left: 14px;
 }
 
 .book-nav-arrow.next-btn {
-  right: 4px;
+  right: 14px;
 }
 
 .book-nav-arrow:disabled {
-  opacity: 0.25;
+  opacity: 0.2;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -2711,54 +2676,19 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
     }
 
     .book-stage-wrapper {
-      padding: 12px 8px 16px;
+      padding: 12px 6px 18px;
       border-radius: 12px;
     }
 
-    /* Toolbar 2 hàng gọn gàng, nút bấm cân đối */
-    .book-toolbar {
-      flex-direction: column;
-      gap: 8px;
-      padding-bottom: 12px;
-      margin-bottom: 12px;
-    }
-
-    .toolbar-left {
-      width: 100%;
+    .book-header-status {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-
-    #prevPageBtn,
-    #nextPageBtn {
-      padding: 7px 12px;
-      font-size: 0.78rem;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    #currentPageBadge {
-      font-size: 0.82rem;
-      padding: 5px 12px;
-      white-space: nowrap;
-    }
-
-    .toolbar-right {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-    }
-
-    .toolbar-right .book-btn-tool {
-      width: 100%;
       justify-content: center;
-      padding: 8px 6px;
-      font-size: 0.75rem;
-      white-space: nowrap;
-      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .page-counter-badge {
+      font-size: 0.88rem;
+      padding: 6px 16px;
     }
 
     .interactive-book-viewport {
@@ -2766,9 +2696,21 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
       padding: 6px 0;
     }
 
-    /* Ẩn 2 mũi tên tròn to trên mobile để tránh đè chữ */
+    /* 2 Nút mũi tên hiển thị rõ nét trên mobile cho người dùng dễ bấm chuyển trang */
     .book-nav-arrow {
-      display: none;
+      display: flex !important;
+      width: 44px;
+      height: 44px;
+      font-size: 1.15rem;
+      z-index: 40;
+    }
+
+    .book-nav-arrow.prev-btn {
+      left: 4px;
+    }
+
+    .book-nav-arrow.next-btn {
+      right: 4px;
     }
 
     .book-interaction-hint {
