@@ -1838,6 +1838,13 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   box-shadow: 0 10px 26px rgba(212, 163, 72, 0.45);
 }
 
+.btn-submit-booking:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none;
+}
+
 /* ==========================================================================
    LOCATION & CONTACT SECTION (Địa chỉ & Giờ mở cửa)
    ========================================================================== */
@@ -2164,6 +2171,10 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
 
   .floating-btn.btn-call {
     background-color: #25d366;
+  }
+
+  .floating-btn.btn-zalo {
+    background-color: #0084ff;
   }
 
   .floating-btn.btn-book {

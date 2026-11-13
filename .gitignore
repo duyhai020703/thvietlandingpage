@@ -1,3 +1,11 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
 # Archives
 *.zip
 *.tar.gz
@@ -5,4 +13,3 @@
 # Operating System Files
 .DS_Store
 Thumbs.db
-

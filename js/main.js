@@ -408,7 +408,7 @@ function initBookingForm() {
     dateInput.value = today;
   }
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const name = document.getElementById('bookingName').value.trim();
@@ -422,9 +422,16 @@ function initBookingForm() {
     // Validate phone VN
     const phoneRegex = /^(0|84)(3|5|7|8|9)[0-9]{8}$/;
     if (!phoneRegex.test(phone.replace(/\s+/g, ''))) {
-      alert('Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số)!');
+      alert('Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số, ví dụ: 0966 903 310)!');
       document.getElementById('bookingPhone').focus();
       return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>Xác Nhận Đặt Bàn Ngay</span>';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Đang Gửi Thông Tin...</span>';
     }
 
     // Sinh mã đặt bàn duy nhất
@@ -434,6 +441,7 @@ function initBookingForm() {
       code: randomCode,
       name,
       phone,
+      branch: '62 Nguyễn Trãi, Tân Ninh, Tây Ninh',
       guests,
       date,
       time,
@@ -443,15 +451,51 @@ function initBookingForm() {
       createdAt: new Date().toLocaleString('vi-VN')
     };
 
-    // Lưu vào LocalStorage
-    saveBookingToHistory(bookingData);
+    try {
+      const response = await fetch('/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bookingData)
+      });
 
-    // Hiển thị modal thành công
-    showBookingSuccessModal(bookingData);
+      const result = await response.json().catch(() => ({}));
 
-    // Reset form
-    form.reset();
-    if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+      if (response.ok && result.success) {
+        // Lưu vào LocalStorage
+        saveBookingToHistory(bookingData);
+
+        // Hiển thị modal thành công
+        showBookingSuccessModal(bookingData);
+
+        // Reset form
+        form.reset();
+        if (dateInput) {
+          const today = new Date().toISOString().split('T')[0];
+          dateInput.value = today;
+          dateInput.min = today;
+        }
+      } else {
+        alert(result.message || 'Có lỗi khi gửi thông tin đặt bàn. Quý khách vui lòng liên hệ Hotline 0966 903 310 để được hỗ trợ đặt bàn ngay!');
+      }
+    } catch (err) {
+      console.warn('Lỗi kết nối API /api/booking:', err);
+      // Fallback: nếu chạy offline hoặc trực tiếp từ file://, vẫn hỗ trợ lưu và hiện popup
+      saveBookingToHistory(bookingData);
+      showBookingSuccessModal(bookingData);
+      form.reset();
+      if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+        dateInput.min = today;
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHtml;
+      }
+    }
   });
 }
 

@@ -1,0 +1,20 @@
+{
+  "name": "thviet-landingpage",
+  "version": "1.0.0",
+  "description": "Mì Cay THVIET Tây Ninh - Đậm Đà Hương Việt",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "landing-page",
+    "restaurant",
+    "mi-cay",
+    "thviet",
+    "tayninh"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+
