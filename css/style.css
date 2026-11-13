@@ -63,6 +63,8 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -1521,7 +1523,7 @@ textarea {
 }
 
 .form-title-group {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .form-title-group h3 {
@@ -1529,125 +1531,131 @@ textarea {
   font-size: 1.8rem;
   color: var(--text-primary);
   margin-bottom: 6px;
+  line-height: 1.3;
 }
 
 .form-title-group p {
   font-size: 0.9rem;
   color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .form-row-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 18px;
+  margin-bottom: 18px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.form-group-notes {
+  margin-bottom: 18px;
 }
 
 .form-label {
   font-size: 0.88rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #ded6cb;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .form-label i {
   color: var(--gold-primary);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
+/* Quy chuẩn đồng bộ 100% cho mọi ô Input, Select, Textarea */
 .form-input,
 .form-select,
 .form-textarea {
   width: 100%;
+  box-sizing: border-box;
   background-color: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
   color: var(--text-primary);
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  font-size: 16px; /* Ngăn chặn hoàn toàn lỗi tự động phóng to trên iOS Safari */
+  line-height: 1.5;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+/* Đảm bảo chiều cao đồng đều 48px tuyệt đối cho Input và Select */
+.form-input,
+.form-select {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* Dropdown Select tinh chỉnh mũi tên màu vàng kim sang trọng */
+.form-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4a348'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.form-select option {
+  background-color: #1e1915;
+  color: var(--text-primary);
+  padding: 10px;
+}
+
+/* Date input chuẩn dark mode, icon lịch vàng sang */
+input[type="date"].form-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color-scheme: dark;
+}
+
+input[type="date"].form-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(100%) saturate(300%) hue-rotate(5deg);
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+/* Textarea cân đối */
+.form-textarea {
+  min-height: 96px;
+  padding: 12px 16px;
+  resize: vertical;
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  outline: none;
   border-color: var(--gold-primary);
-  box-shadow: 0 0 0 3px rgba(212, 163, 72, 0.15);
+  background-color: #241d18;
+  box-shadow: 0 0 0 3px rgba(212, 163, 72, 0.2);
 }
 
-.form-select option {
-  background-color: var(--bg-surface-elevated);
-  color: var(--text-primary);
-}
-
-/* Spicy Level Selector */
-.spicy-selector-group {
-  margin-bottom: 24px;
-}
-
-.spicy-levels-strip {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.spicy-choice-item {
-  position: relative;
-}
-
-.spicy-choice-item input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.spicy-label-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 4px;
-  background-color: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.spicy-choice-item input[type="radio"]:checked+.spicy-label-btn {
-  background-color: var(--red-deep);
-  border-color: #e63946;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 30, 27, 0.4);
-}
-
-.spicy-lvl-num {
-  font-weight: 700;
-  font-size: 0.95rem;
-  line-height: 1;
-}
-
-.spicy-lvl-name {
-  font-size: 0.65rem;
+.form-input::placeholder,
+.form-textarea::placeholder {
   color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.spicy-choice-item input[type="radio"]:checked+.spicy-label-btn .spicy-lvl-name {
-  color: #ffccd5;
+  opacity: 0.75;
 }
 
 /* Free drinks banner in form */
@@ -2048,94 +2056,847 @@ textarea {
   }
 
   /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
+   RESPONSIVE MEDIA QUERIES (TỐI ƯU TOÀN DIỆN CHO MOBILE, TABLET & DESKTOP)
    ========================================================================== */
-    @media (max-width: 1280px) {
-      .nav-links {
-        gap: 14px;
-      }
-
-      .nav-links a {
-        font-size: 0.86rem;
-      }
-
-      .btn-hotline-header {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-      }
-
-      .btn-reserve-nav {
-        padding: 8px 16px;
-        font-size: 0.86rem;
-      }
+  @media (max-width: 1280px) {
+    .nav-links {
+      gap: 14px;
     }
 
-    @media (max-width: 1040px) {
-
-      .nav-links,
-      .nav-actions .btn-hotline-header {
-        display: none;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .reservation-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-cards-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-top {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .hero-headline {
-        font-size: 2.6rem;
-      }
+    .nav-links a {
+      font-size: 0.86rem;
     }
 
-    @media (max-width: 768px) {
-
-
-      .hero-headline {
-        font-size: 2.1rem;
-      }
-
-      .section-title {
-        font-size: 1.9rem;
-      }
-
-      .form-row-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .ambiance-featured-card {
-        height: 320px;
-      }
-
-      .ambiance-gallery-row {
-        grid-template-columns: 1fr;
-      }
-
-      .book-stage-wrapper {
-        padding: 16px 10px 24px;
-      }
-
-      .interactive-book-viewport {
-        min-height: 480px;
-      }
+    .btn-hotline-header {
+      padding: 6px 10px;
+      font-size: 0.85rem;
     }
+
+    .btn-reserve-nav {
+      padding: 8px 16px;
+      font-size: 0.86rem;
+    }
+  }
+
+  /* Tablet & màn hình vừa (< 1040px) */
+  @media (max-width: 1040px) {
+    .nav-actions .btn-hotline-header {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+    }
+
+    /* Mobile Drawer Menu lướt xuống mượt mà */
+    .nav-links {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background-color: rgba(19, 16, 14, 0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 2px solid var(--border-panel);
+      flex-direction: column;
+      align-items: stretch;
+      padding: 16px 20px 22px;
+      gap: 4px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9);
+      transform: translateY(-130%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 99;
+    }
+
+    .nav-links.mobile-open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-links li {
+      width: 100%;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      border-radius: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background-color: var(--gold-soft);
+      color: var(--gold-light);
+      padding-left: 18px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .reservation-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .contact-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .hero-headline {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* Mobile Portrait (< 768px) */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 16px;
+    }
+
+    .nav-container {
+      padding: 0 14px;
+    }
+
+    .nav-inner {
+      height: 64px;
+      gap: 10px;
+    }
+
+    .brand-logo-wrap {
+      gap: 10px;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-width: 1.5px;
+    }
+
+    .logo-badge .th-letter {
+      font-size: 1.1rem;
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+    }
+
+    .brand-tagline {
+      font-size: 0.62rem;
+      letter-spacing: 1.2px;
+    }
+
+    .btn-reserve-nav {
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .mobile-menu-btn {
+      width: 38px;
+      height: 38px;
+      font-size: 1.1rem;
+    }
+
+    /* Hero Section Mobile */
+    .hero-section {
+      padding: 28px 0 36px;
+    }
+
+    .hero-grid {
+      gap: 28px;
+    }
+
+    .hero-pill-badge {
+      font-size: 0.76rem;
+      padding: 5px 12px;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .hero-headline {
+      font-size: clamp(1.8rem, 6.2vw, 2.25rem);
+      line-height: 1.22;
+      word-break: keep-all;
+      margin-bottom: 12px;
+    }
+
+    .hero-headline .text-gold {
+      display: block;
+      font-size: 0.88em;
+      margin-top: 2px;
+    }
+
+    .hero-subheadline {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+
+    .opening-offer-card {
+      padding: 18px 14px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .offer-header {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .offer-title {
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .offer-badge-free {
+      font-size: 0.7rem;
+      padding: 3px 7px;
+      white-space: nowrap;
+    }
+
+    .offer-highlight-text {
+      font-size: clamp(1.05rem, 4.4vw, 1.25rem);
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .offer-desc {
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    /* Countdown hiển thị đều đặn 4 cột cân xứng */
+    .countdown-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    .countdown-label {
+      text-align: center;
+      font-size: 0.74rem;
+    }
+
+    .countdown-timer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      width: 100%;
+    }
+
+    .time-unit {
+      padding: 6px 2px;
+      text-align: center;
+    }
+
+    .time-val {
+      font-size: 1.1rem;
+    }
+
+    .time-txt {
+      font-size: 0.62rem;
+    }
+
+    /* Nút CTA xếp dọc chiếm trọn bề ngang, chữ không rớt dòng */
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .hero-actions .btn-primary,
+    .hero-actions .btn-secondary {
+      width: 100%;
+      justify-content: center;
+      padding: 13px 18px;
+      font-size: 0.94rem;
+      white-space: nowrap;
+    }
+
+    .hero-poster-frame img {
+      height: 360px;
+    }
+
+    .hero-floating-badge {
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      padding: 12px 14px;
+      gap: 8px;
+    }
+
+    .floating-info h4 {
+      font-size: 0.95rem;
+    }
+
+    .floating-info p {
+      font-size: 0.74rem;
+      line-height: 1.35;
+    }
+
+    .floating-btn-action {
+      padding: 6px 12px;
+      font-size: 0.76rem;
+      white-space: nowrap;
+    }
+
+    /* Section Headers */
+    .section-header {
+      margin-bottom: 24px;
+    }
+
+    .section-tag {
+      font-size: 0.74rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 5.2vw, 1.95rem);
+      line-height: 1.25;
+      word-break: keep-all;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    /* About Section */
+    .about-section {
+      padding: 44px 0;
+    }
+
+    .about-grid {
+      gap: 28px;
+    }
+
+    .about-gallery-mosaic {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mosaic-item.tall {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      height: 210px;
+    }
+
+    .mosaic-item:not(.tall) {
+      height: 130px;
+    }
+
+    .about-lead-quote {
+      font-size: 1.1rem;
+      line-height: 1.45;
+      padding-left: 12px;
+      margin-bottom: 14px;
+    }
+
+    .about-body-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    /* 4 Cam kết xếp thành 1 cột cân đối, chữ không vỡ dòng */
+    .core-values-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .value-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+
+    .value-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .value-title {
+      font-size: 0.95rem;
+      white-space: nowrap;
+      margin-bottom: 2px;
+    }
+
+    .value-desc {
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    /* Menu Book Mobile */
+    .menu-book-section {
+      padding: 44px 0 50px;
+    }
+
+    /* Thanh mục lục lướt ngang mượt mà như app */
+    .menu-category-pills {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding: 4px 4px 12px;
+      gap: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+
+    .menu-category-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-pill-btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+
+    .book-stage-wrapper {
+      padding: 12px 8px 16px;
+      border-radius: 12px;
+    }
+
+    /* Toolbar 2 hàng gọn gàng, nút bấm cân đối */
+    .book-toolbar {
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar-left {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #prevPageBtn,
+    #nextPageBtn {
+      padding: 7px 12px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    #currentPageBadge {
+      font-size: 0.82rem;
+      padding: 5px 12px;
+      white-space: nowrap;
+    }
+
+    .toolbar-right {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .toolbar-right .book-btn-tool {
+      width: 100%;
+      justify-content: center;
+      padding: 8px 6px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .interactive-book-viewport {
+      min-height: 440px;
+      padding: 6px 0;
+    }
+
+    /* Ẩn 2 mũi tên tròn to trên mobile để tránh đè chữ */
+    .book-nav-arrow {
+      display: none;
+    }
+
+    .book-interaction-hint {
+      font-size: 0.76rem;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    /* Không gian quán */
+    .ambiance-section {
+      padding: 44px 0;
+    }
+
+    .ambiance-featured-card {
+      height: 220px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .ambiance-caption-overlay {
+      padding: 14px;
+    }
+
+    .ambiance-caption-overlay h3 {
+      font-size: 1.15rem;
+      margin-bottom: 2px;
+    }
+
+    .ambiance-caption-overlay p {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .ambiance-gallery-row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .ambiance-card {
+      height: 200px;
+      border-radius: 12px;
+    }
+
+    .ambiance-mini-caption {
+      padding: 14px 12px;
+    }
+
+    .ambiance-mini-caption h4 {
+      font-size: 1.05rem;
+    }
+
+    .ambiance-mini-caption p {
+      font-size: 0.76rem;
+    }
+
+    /* Đặt bàn trực tuyến & Form cân đối */
+    .reservation-section {
+      padding: 44px 0;
+    }
+
+    .reservation-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .reservation-benefits-card,
+    .booking-form-card {
+      padding: 20px 14px;
+      border-radius: 14px;
+    }
+
+    .benefits-title {
+      font-size: 1.3rem;
+      line-height: 1.3;
+      word-break: keep-all;
+      margin-bottom: 8px;
+    }
+
+    .benefits-subtitle {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .benefit-list {
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .benefit-item {
+      gap: 10px;
+    }
+
+    .benefit-icon-box {
+      width: 32px;
+      height: 32px;
+      font-size: 0.85rem;
+    }
+
+    .benefit-item h5 {
+      font-size: 0.9rem;
+    }
+
+    .benefit-item p {
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .reservation-direct-contact {
+      padding: 12px 14px;
+      border-radius: 10px;
+    }
+
+    .hotline-call-btn {
+      font-size: 1.25rem;
+      white-space: nowrap;
+    }
+
+    .form-title-group {
+      margin-bottom: 18px;
+    }
+
+    .form-title-group h3 {
+      font-size: 1.35rem;
+      line-height: 1.25;
+    }
+
+    .form-title-group p {
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .form-row-2 {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .form-group-notes {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .form-input,
+    .form-select {
+      height: 48px;
+      min-height: 48px;
+      font-size: 16px;
+      padding: 0 14px;
+    }
+
+    .form-textarea {
+      min-height: 88px;
+      font-size: 16px;
+      padding: 10px 14px;
+    }
+
+    .form-promo-badge {
+      padding: 10px 12px;
+      gap: 10px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+    }
+
+    .form-promo-badge p {
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .btn-submit-booking {
+      height: 48px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      padding: 0 12px;
+      border-radius: 8px;
+    }
+
+    /* Liên hệ & Bản đồ */
+    .contact-section {
+      padding: 44px 0;
+    }
+
+    .contact-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .contact-info-card {
+      padding: 18px 14px;
+      border-radius: 12px;
+      gap: 8px;
+    }
+
+    .info-card-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 1.15rem;
+    }
+
+    .info-card-title {
+      font-size: 1.1rem;
+      white-space: nowrap;
+    }
+
+    .info-card-desc {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .info-card-link {
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .map-container {
+      height: 300px;
+      border-radius: 12px;
+    }
+
+    /* Footer Mobile */
+    .site-footer {
+      padding: 36px 0 20px;
+    }
+
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .footer-brand p {
+      max-width: 100%;
+      font-size: 0.82rem;
+      margin-top: 10px;
+    }
+
+    .footer-col h4 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      padding-top: 18px;
+    }
+
+    /* Floating Quick Actions */
+    .floating-quick-bar {
+      bottom: 14px;
+      right: 12px;
+      gap: 8px;
+    }
+
+    .floating-btn {
+      width: 42px;
+      height: 42px;
+      font-size: 1.05rem;
+    }
+
+    /* Modals Mobile */
+    .modal-dialog {
+      padding: 24px 16px;
+      margin: 12px;
+      border-radius: 14px;
+    }
+
+    .booking-code-chip .code-value {
+      font-size: 1.35rem;
+    }
+
+    .lightbox-modal .modal-dialog {
+      padding: 6px;
+      width: 98vw;
+      max-width: 98vw;
+      max-height: 96vh;
+    }
+
+    .lightbox-img-wrap img {
+      max-height: 86vh;
+    }
+  }
+
+  /* Extra Small Devices (< 420px) */
+  @media (max-width: 420px) {
+    .nav-container {
+      padding: 0 10px;
+    }
+
+    .brand-title {
+      font-size: 1.08rem;
+    }
+
+    .brand-tagline {
+      display: none;
+    }
+
+    .btn-reserve-nav {
+      padding: 6px 10px;
+      font-size: 0.75rem;
+    }
+
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+    }
+
+    .logo-badge .th-letter {
+      font-size: 0.95rem;
+    }
+
+    .hero-headline {
+      font-size: 1.7rem;
+    }
+
+    .offer-title {
+      font-size: 0.86rem;
+    }
+
+    .offer-badge-free {
+      font-size: 0.65rem;
+    }
+
+    .time-val {
+      font-size: 0.98rem;
+    }
+
+    .time-txt {
+      font-size: 0.58rem;
+    }
+
+    .btn-submit-booking {
+      font-size: 0.88rem;
+    }
+  }

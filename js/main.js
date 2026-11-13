@@ -219,8 +219,8 @@ function initMenuBook() {
     let pageHeight = 791; // 580 * (1440 / 1056) = 790.9
 
     if (isMobile) {
-      pageWidth = 360;
-      pageHeight = 491;
+      pageWidth = 340;
+      pageHeight = 464;
     } else if (isTablet) {
       pageWidth = 470;
       pageHeight = 641;
@@ -230,9 +230,9 @@ function initMenuBook() {
       width: pageWidth,
       height: pageHeight,
       size: 'stretch',
-      minWidth: 320,
+      minWidth: 280,
       maxWidth: 720,
-      minHeight: 436,
+      minHeight: 382,
       maxHeight: 982,
       maxShadowOpacity: 0.12, // Giảm tối đa bóng đổ mờ đè lên chữ
       showCover: true,
@@ -683,31 +683,45 @@ function initHeaderAndScroll() {
     });
   }
 
+  // Tối ưu hóa điều khiển Mobile Navigation Drawer
   if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener('click', () => {
-      const isVisible = navLinks.style.display === 'flex';
-      navLinks.style.display = isVisible ? 'none' : 'flex';
-      if (!isVisible) {
-        navLinks.style.flexDirection = 'column';
-        navLinks.style.position = 'absolute';
-        navLinks.style.top = '100%';
-        navLinks.style.left = '0';
-        navLinks.style.right = '0';
-        navLinks.style.backgroundColor = 'rgba(19, 16, 14, 0.98)';
-        navLinks.style.padding = '24px';
-        navLinks.style.borderBottom = '1px solid var(--border-panel)';
-        navLinks.style.boxShadow = '0 10px 30px rgba(0,0,0,0.8)';
-      }
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = navLinks.classList.toggle('mobile-open');
+      mobileToggle.classList.toggle('active', isOpen);
+      mobileToggle.innerHTML = isOpen
+        ? '<i class="fa-solid fa-xmark"></i>'
+        : '<i class="fa-solid fa-bars"></i>';
     });
 
-    // Đóng mobile menu khi bấm vào link
+    // Đóng mobile menu khi bấm vào bất kỳ link điều hướng nào
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-          navLinks.style.display = 'none';
-        }
+        navLinks.classList.remove('mobile-open');
+        mobileToggle.classList.remove('active');
+        mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
       });
     });
+
+    // Đóng mobile menu khi bấm ra ngoài
+    document.addEventListener('click', (e) => {
+      if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+        navLinks.classList.remove('mobile-open');
+        mobileToggle.classList.remove('active');
+        mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      }
+    });
   }
+
+  // Lắng nghe sự kiện xoay màn hình hoặc đổi kích thước để cập nhật sách lật mượt mà
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (pageFlipInstance) {
+        pageFlipInstance.update();
+      }
+    }, 250);
+  });
 }
 
