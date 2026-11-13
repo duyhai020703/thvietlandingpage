@@ -5,6 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initHeaderSlider();
   initCountdown();
   initMenuBook();
   initBookingForm();
@@ -236,7 +237,7 @@ function initMenuBook() {
       maxHeight: 982,
       maxShadowOpacity: 0.12, // Giảm tối đa bóng đổ mờ đè lên chữ
       showCover: true,
-      mobileScrollSupport: false,
+      mobileScrollSupport: true, // Cho phép cuộn trang mượt mà tự nhiên, không bị khựng ghì
       usePortrait: true,
       flippingTime: 650,
       startPage: 0
@@ -675,7 +676,7 @@ function initHeaderAndScroll() {
         scrollTopBtn.classList.remove('show');
       }
     }
-  });
+  }, { passive: true });
 
   if (scrollTopBtn) {
     scrollTopBtn.addEventListener('click', () => {
@@ -723,5 +724,121 @@ function initHeaderAndScroll() {
       }
     }, 250);
   });
+}
+
+/* ==========================================================================
+   9. HEADER SLIDER BANNER (TỰ ĐỘNG CHUYỂN ẢNH 1 GIÂY/LẦN & NÚT MŨI TÊN 2 BÊN)
+   ========================================================================== */
+function initHeaderSlider() {
+  const track = document.getElementById('headerSliderTrack');
+  if (!track) return;
+
+  const slides = track.querySelectorAll('.slider-slide');
+  const prevBtn = document.getElementById('sliderPrevBtn');
+  const nextBtn = document.getElementById('sliderNextBtn');
+  const dots = document.querySelectorAll('.slider-dot');
+  if (slides.length === 0) return;
+
+  let currentIndex = 0;
+  let sliderInterval = null;
+  const SLIDE_DURATION = 1000; // Cài đặt đúng 1s chuyển ảnh 1 lần theo yêu cầu
+
+  function showSlide(index) {
+    if (index < 0) {
+      currentIndex = slides.length - 1;
+    } else if (index >= slides.length) {
+      currentIndex = 0;
+    } else {
+      currentIndex = index;
+    }
+
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentIndex);
+    });
+
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentIndex);
+    });
+  }
+
+  function nextSlide() {
+    showSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentIndex - 1);
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay();
+    sliderInterval = setInterval(nextSlide, SLIDE_DURATION);
+  }
+
+  function stopAutoPlay() {
+    if (sliderInterval) {
+      clearInterval(sliderInterval);
+      sliderInterval = null;
+    }
+  }
+
+  function restartAutoPlay() {
+    startAutoPlay();
+  }
+
+  // Bắt sự kiện bấm nút mũi tên kế tiếp
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      nextSlide();
+      restartAutoPlay();
+    });
+  }
+
+  // Bắt sự kiện bấm nút mũi tên trước đó
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      prevSlide();
+      restartAutoPlay();
+    });
+  }
+
+  // Bắt sự kiện bấm vào từng thanh dot
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.getAttribute('data-index'), 10);
+      showSlide(idx);
+      restartAutoPlay();
+    });
+  });
+
+  // Hỗ trợ cử chỉ vuốt ngón tay (Touch Swipe) mượt mà trên Mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const sliderWrapper = track.closest('.slider-wrapper');
+
+  if (sliderWrapper) {
+    sliderWrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    sliderWrapper.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].clientX;
+      const diffX = touchStartX - touchEndX;
+      if (Math.abs(diffX) > 35) {
+        if (diffX > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+        restartAutoPlay();
+      }
+    }, { passive: true });
+
+    sliderWrapper.addEventListener('mouseenter', stopAutoPlay);
+    sliderWrapper.addEventListener('mouseleave', startAutoPlay);
+  }
+
+  startAutoPlay();
 }
 

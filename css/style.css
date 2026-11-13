@@ -61,9 +61,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
   font-size: 16px;
-  overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -72,7 +70,10 @@ body {
   background-color: var(--bg-main);
   color: var(--text-primary);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   background-image:
     radial-gradient(circle at 15% 10%, rgba(212, 163, 72, 0.035) 0%, transparent 40%),
     radial-gradient(circle at 85% 80%, rgba(139, 30, 27, 0.03) 0%, transparent 45%);
@@ -348,6 +349,170 @@ textarea {
   font-size: 1.5rem;
   cursor: pointer;
   padding: 6px;
+}
+
+/* ==========================================================================
+   HEADER SLIDER BANNER (Không Gian Quán Mì Cay THVIET Dưới Header)
+   ========================================================================== */
+.header-slider-banner {
+  width: 100%;
+  background-color: #0e0c0a;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--border-panel);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 520px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.slider-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slider-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease-in-out, transform 0.6s ease;
+  transform: scale(1.03);
+}
+
+.slider-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.slider-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Caption overlay trên ảnh banner */
+.slide-caption-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 50px 36px 26px;
+  background: linear-gradient(to top, rgba(14, 11, 9, 0.95) 0%, rgba(14, 11, 9, 0.65) 55%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 3;
+}
+
+.slide-caption-tag {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background-color: rgba(212, 163, 72, 0.2);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--gold-border);
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slide-caption-title {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+  line-height: 1.25;
+}
+
+.slide-caption-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* 2 Nút mũi tên ở 2 bên (Hiển thị rõ cả Desktop & Mobile) */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(26, 20, 16, 0.88);
+  border: 1.5px solid var(--gold-primary);
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.slider-arrow:hover {
+  background-color: var(--gold-primary);
+  color: #15100c;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slider-arrow-prev {
+  left: 24px;
+}
+
+.slider-arrow-next {
+  right: 24px;
+}
+
+/* Dots thanh chỉ số slide */
+.slider-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider-dot {
+  width: 28px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.35);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slider-dot.active {
+  width: 46px;
+  background-color: var(--gold-primary);
+  box-shadow: 0 0 10px rgba(212, 163, 72, 0.7);
 }
 
 /* Hero Section */
@@ -868,6 +1033,7 @@ textarea {
   box-shadow: var(--shadow-book);
   position: relative;
   overflow: hidden;
+  touch-action: pan-y;
 }
 
 /* Book Controls Bar */
@@ -945,6 +1111,7 @@ textarea {
   min-height: 820px;
   position: relative;
   padding: 20px 0;
+  touch-action: pan-y;
 }
 
 /* Prev / Next Page floating trigger buttons */
@@ -994,6 +1161,7 @@ textarea {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
   border-radius: 4px;
   position: relative;
+  touch-action: pan-y;
 }
 
 .flip-page {
@@ -2080,6 +2248,10 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
 
   /* Tablet & màn hình vừa (< 1040px) */
   @media (max-width: 1040px) {
+    .slider-wrapper {
+      height: 400px;
+    }
+
     .nav-actions .btn-hotline-header {
       display: none;
     }
@@ -2217,6 +2389,50 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
       width: 38px;
       height: 38px;
       font-size: 1.1rem;
+    }
+
+    /* Slider Banner Mobile */
+    .slider-wrapper {
+      height: 270px;
+    }
+
+    .slider-arrow {
+      width: 38px;
+      height: 38px;
+      font-size: 0.95rem;
+    }
+
+    .slider-arrow-prev {
+      left: 10px;
+    }
+
+    .slider-arrow-next {
+      right: 10px;
+    }
+
+    .slide-caption-overlay {
+      padding: 24px 14px 14px;
+    }
+
+    .slide-caption-title {
+      font-size: 1.1rem;
+    }
+
+    .slide-caption-desc {
+      font-size: 0.78rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .slider-dot {
+      width: 20px;
+      height: 3px;
+    }
+
+    .slider-dot.active {
+      width: 32px;
     }
 
     /* Hero Section Mobile */
@@ -2850,6 +3066,33 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
 
   /* Extra Small Devices (< 420px) */
   @media (max-width: 420px) {
+    .slider-wrapper {
+      height: 220px;
+    }
+
+    .slider-arrow {
+      width: 32px;
+      height: 32px;
+      font-size: 0.85rem;
+    }
+
+    .slider-arrow-prev {
+      left: 6px;
+    }
+
+    .slider-arrow-next {
+      right: 6px;
+    }
+
+    .slide-caption-title {
+      font-size: 0.98rem;
+    }
+
+    .slide-caption-tag {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+    }
+
     .nav-container {
       padding: 0 10px;
     }
