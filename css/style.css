@@ -411,11 +411,11 @@ textarea {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 50px 36px 26px;
+  padding: 50px 36px 44px; /* Nâng 2 dòng text lên để không bị đè bởi thanh list ảnh/dots */
   background: linear-gradient(to top, rgba(14, 11, 9, 0.95) 0%, rgba(14, 11, 9, 0.65) 55%, transparent 100%);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   z-index: 3;
 }
 
@@ -490,7 +490,7 @@ textarea {
 /* Dots thanh chỉ số slide */
 .slider-dots {
   position: absolute;
-  bottom: 16px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -2411,7 +2411,7 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
     }
 
     .slide-caption-overlay {
-      padding: 24px 14px 14px;
+      padding: 24px 14px 38px; /* Đưa text lên cao trên mobile tránh đè thanh dots */
     }
 
     .slide-caption-title {
@@ -2424,6 +2424,10 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .slider-dots {
+      bottom: 10px;
     }
 
     .slider-dot {
@@ -3088,9 +3092,12 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
       font-size: 0.98rem;
     }
 
-    .slide-caption-tag {
-      font-size: 0.68rem;
-      padding: 2px 8px;
+    .slide-caption-overlay {
+      padding: 18px 10px 32px;
+    }
+
+    .slider-dots {
+      bottom: 8px;
     }
 
     .nav-container {

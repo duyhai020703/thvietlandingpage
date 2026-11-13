@@ -298,12 +298,16 @@ function updatePageStatus(currentPageIdx) {
   if (prevBtn) prevBtn.disabled = (currentPageIdx <= 0);
   if (nextBtn) nextBtn.disabled = (currentPageIdx >= total - 1);
 
-  // Update thumbnails active state
+  // Update thumbnails active state (Chỉ cuộn nội bộ dải thumbnail, không làm giật cuộn cả trang web)
   const thumbs = document.querySelectorAll('.thumb-item');
+  const scrollContainer = document.getElementById('bookThumbnailsScroll');
   thumbs.forEach((th, i) => {
     if (i === currentPageIdx) {
       th.classList.add('active');
-      th.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      if (scrollContainer) {
+        const scrollLeft = th.offsetLeft - (scrollContainer.clientWidth / 2) + (th.offsetWidth / 2);
+        scrollContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      }
     } else {
       th.classList.remove('active');
     }
@@ -715,19 +719,26 @@ function initHeaderAndScroll() {
   }
 
   // Lắng nghe sự kiện xoay màn hình hoặc đổi kích thước để cập nhật sách lật mượt mà
+  let lastWindowWidth = window.innerWidth;
   let resizeTimer;
   window.addEventListener('resize', () => {
+    // Chỉ cập nhật khi chiều ngang thay đổi (xoay máy hoặc resize trình duyệt)
+    // Tuyệt đối không giật cập nhật khi lướt lên/xuống làm thanh địa chỉ mobile ẩn hiện
+    if (window.innerWidth === lastWindowWidth) {
+      return;
+    }
+    lastWindowWidth = window.innerWidth;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       if (pageFlipInstance) {
         pageFlipInstance.update();
       }
-    }, 250);
+    }, 300);
   });
 }
 
 /* ==========================================================================
-   9. HEADER SLIDER BANNER (TỰ ĐỘNG CHUYỂN ẢNH 1 GIÂY/LẦN & NÚT MŨI TÊN 2 BÊN)
+   9. HEADER SLIDER BANNER (TỰ ĐỘNG CHUYỂN ẢNH 3 GIÂY/LẦN & NÚT MŨI TÊN 2 BÊN)
    ========================================================================== */
 function initHeaderSlider() {
   const track = document.getElementById('headerSliderTrack');
@@ -741,7 +752,7 @@ function initHeaderSlider() {
 
   let currentIndex = 0;
   let sliderInterval = null;
-  const SLIDE_DURATION = 1000; // Cài đặt đúng 1s chuyển ảnh 1 lần theo yêu cầu
+  const SLIDE_DURATION = 3000; // Cài đặt 3s chuyển ảnh 1 lần theo yêu cầu mới
 
   function showSlide(index) {
     if (index < 0) {
